@@ -4,7 +4,7 @@ An ExpressJS server to serve Harry Potter themed data to a client.
 ## Installation
 Clone this project with the command:
 ```bash
-git clone https://github.com/warren-west/bed-25-quotes-server.git
+git clone https://github.com/warren-west/bed-25-express-demo-1.git
 ```
 ## Explanation
 ### Setting up the server
