@@ -1,0 +1,17 @@
+[
+    {
+        "id": 1,
+        "name": "Expelliamus",
+        "description": "Disarms an opponent."
+    },
+    {
+        "id": 2,
+        "name": "Avarda Kadavra",
+        "description": "The worst forbidden spell. The killing curse."
+    },
+    {
+        "id": 3,
+        "name": "Expecto Patronum",
+        "description": "Get away dementors. Be gone."
+    }
+]
