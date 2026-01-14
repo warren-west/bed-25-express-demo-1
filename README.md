@@ -84,8 +84,92 @@ module.exports = {
 ```
 
 ### Creating routes
-We can image that as our project expands, `server.js` will get very big, which is one of the major drawbacks we noted from the previous quotes demo. So from the beginning of this project, we're going to implement a smarter project structure. We'll logically sepearte CRUD functionality for each "entity" (wizard / spell) into a .js file. These files we'll put into a folder called `routes`.
-Notice we have two files inside this folder called `wizards.js` and `spells.js`. These files are currently not properly configures for our server.js to access them, we will do this tomorrow. This is where we end off for today.
+We can image that as our project expands, `server.js` will get very big, which is one of the major drawbacks we noted from the previous quotes demo. So from the beginning of this project, we're going to implement a smarter project structure. We'll logically separate CRUD functionality for each "entity" (wizard / spell) into its own .js file. These files we'll put into a folder called `routes`.
+Notice we have two files inside this folder called `wizards.js` and `spells.js`. We have configured these files to use routers (which is basically the same thing as the server object we have used up until now), and export these routers to use in server.js. Let's examine `wizards.js` in the `routes` folder.
 
+```javascript
+// we need to import express here because it provides us with the Router() function
+const express = require('express')
+// create a router for this wizards route
+const router = express.Router()
 
-Updates coming soon...
+// router logic...
+
+// export the router we have created
+module.exports = router
+```
+Once we've created a router object, we can configure it with endpoints:
+```javascript
+const express = require('express')
+const router = express.Router()
+
+// create endpoints with .get() / .post() / .put() / .delete()
+router.get('/', (req, res) => {    
+    // fetch the data from the database
+    const result = getAllWizards()
+    
+    res.status(result.code).json(result.data)
+    res.end()
+})
+
+module.exports = router
+```
+Once we have an endpoint that is working, we can test it out by connecting this router to our server in server.js:
+```javascript
+const express = require("express")
+
+// import the router object we exported from /routes/wizards.js
+const wizardsRouter = require('./routes/wizards')
+
+// connect it to the server
+server.use('/wizards', wizardsRouter)
+// now incoming requests where URL = /wizards will be redirected into the router logic
+```
+
+> Note that any incoming requests with the URL = `localhost:8099/wizards` will be caught by the server, and the server will match `/wizards` to the `wizardsRouter`'s URL, and forward the request to the router in `/routes/wizards.js`.
+>
+> **Client request → Server (server.js) → Route (wizards.js)**
+---
+### Request body
+The next thing to look at is how we handle getting data from the body of a request object. For example, when we want to add a new wizard to the database, the client provides us with some wizard data. When working with the `http` module before, we used the code:
+```javascript
+http.createServer((req, res) => {
+    if (req.method == "POST" && req.url == "/wizards") {
+        let data = ""
+        req.on("data", (chunk) => {
+            data += chunk
+        })
+        req.on("end", () => {
+            // do something with data
+            console.log(data)
+        })
+    }
+})
+```
+Now we can use a piece of ExpressJS middleware to read data from the body of requests much easier:
+```javascript
+// routes/wizards.js
+router.post('/', (req, res) => {
+    // this single line of code replaces the code snippet above
+    const data = req.body
+    console.log(data)
+})
+```
+Initially this will throw an error because `request.body` will be `undefined`. We need to configure our server to use ExpressJS middleware that does this, because it's not the default behavior. Notice the line of code in server.js:
+```javascript
+const express = require("express")
+
+const wizardsRouter = require('./routes/wizards')
+const spellsRouter = require('./routes/spells')
+
+const server = express()
+
+// middleware
+// let's us read the body on incoming HTTP requests
+// (new wizard data, updated wizard data, etc...)
+server.use(express.json())
+// without this middleware req.body = undefined
+```
+---
+### Request query parameters
+*we will continue with this tomorrow*

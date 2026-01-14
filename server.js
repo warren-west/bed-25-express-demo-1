@@ -14,7 +14,7 @@ const server = express()
 const PORT = 8099 //uppercase variable names implies true constants (values that should never change)
 
 // middleware
-server.use(express.json()) //so that we can read the body on incoming requests (new wizard data, etc...)
+server.use(express.json()) // so that we can read the body on incoming requests (new wizard data, etc...)
 server.use(warrenLogger) // my custom middleware
 
 // Use the routes (wire it up):
