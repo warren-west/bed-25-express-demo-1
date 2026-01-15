@@ -2,9 +2,14 @@
 An ExpressJS server to serve Harry Potter themed data to a client.
 
 ## Installation
-Clone this project with the command:
+1. Clone this project with the command:
 ```bash
 git clone https://github.com/warren-west/bed-25-express-demo-1.git
+```
+
+2. Install the required dependencies (node_modules) by running the command:
+```bash
+npm i
 ```
 ## Explanation
 ### Setting up the server

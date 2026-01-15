@@ -2,28 +2,25 @@ const express = require('express')
 const router = express.Router()
 const { getAllWizards, getWizardById, addWizard } = require('../data/database')
 
-
 // GET + '/'
 // /wizards/
+// /wizards?house=Gryffindor (search for wizard)
 router.get('/', (req, res) => {    
     // fetch the data from the database
     const result = getAllWizards()
+    const houseSearchString = req.query.house || ""
     
+    if (houseSearchString.length > 0) {
+        let filteredList = result.data.filter(w => w.house.includes(houseSearchString))
+        res.status(result.code).json(filteredList)
+        res.end()
+        return
+    }
+
     res.status(result.code).json(result.data)
     res.end()
 })
 
-// search for wizard /wizards?surname=Weasley
-// using query parameters
-router.get('/', (req, res) => {
-    // TODO: Implement this endpoint
-    // grab the query parameter (search name)
-    
-    // use the database method
-
-    // generate a response
-
-})
 
 // /wizards/5
 router.get('/:id', (req, res) => {
